@@ -21,10 +21,11 @@ public class InGameLifetimeScope : LifetimeScope
         // メッセージを送信するProviderを起動する
         // ITickableインターフェースを実装してメッセージを作成、パイプに流す
         builder.RegisterEntryPoint<ItemEventProvider>(Lifetime.Singleton);
+
         // DI(依存性の注入)しながらInstantiate
-        builder.RegisterBuildCallback(resolver =>
-        {
-            resolver.Instantiate(_receiver);
-        });
+        //builder.RegisterBuildCallback(resolver =>
+        //{
+        //    resolver.Instantiate(_receiver);
+        //});
     }
 }

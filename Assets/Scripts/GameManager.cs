@@ -7,9 +7,7 @@ public class GameManager : MonoBehaviour
 {
     void Start()
     {
-#if UNITY_STANDALONE
-        Debug.unityLogger.logEnabled = false;
-#endif  
+        //Debug.unityLogger.logEnabled = false;
     }
 
     void Update()

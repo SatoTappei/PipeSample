@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 /// <summary>
-/// アイテムのデータのクラス
+/// アイテムのデータの構造体
 /// </summary>
 public readonly struct ItemData : IEquatable<ItemData>
 {
