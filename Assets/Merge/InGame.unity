@@ -441,6 +441,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1069762842}
   - component: {fileID: 1069762843}
+  - component: {fileID: 1069762844}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -475,6 +476,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aa667a25cd9c314683d27f4fd3fbc7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1069762844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069762841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f36216efd3cd38545b72f5eb060b8138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+  _receiver: {fileID: 4105362947140163883}
 --- !u!4 &1522991413 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2364307010229973598, guid: dde2588f5e0bc7b4ab407c1ae99bd5c1, type: 3}
@@ -2875,6 +2893,7 @@ GameObject:
   - component: {fileID: 4105362947140163881}
   - component: {fileID: 4105362947140163880}
   - component: {fileID: 4105362947140163882}
+  - component: {fileID: 4105362947140163883}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2950,3 +2969,15 @@ MonoBehaviour:
   _rb: {fileID: 4105362947140163880}
   _anim: {fileID: 4105362947140163876}
   _speed: 10
+--- !u!114 &4105362947140163883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105362947140163877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6d6687478122144baac9d9d0e772f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
