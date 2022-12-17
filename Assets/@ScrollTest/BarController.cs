@@ -27,5 +27,4 @@ namespace Scroll
                 .Subscribe(v => _rb.velocity = v[0] * _speed);
         }
     }
-
 }
