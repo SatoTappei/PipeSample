@@ -5,20 +5,20 @@ using MessagePipe;
 using VContainer.Unity;
 
 /// <summary>
-/// アイテム関係のイベントの送信を行う
+/// アイテム関係のイベントの送信を行う、エントリーポイント
 /// </summary>
-public sealed class ItemEventProvider : ITickable
+public sealed class ItemEventPresenter : ITickable
 {
     /// <summary>MessagePipeにメッセージを流す用のインターフェース</summary>
     readonly IPublisher<ItemData> _itemPublisher;
 
     /// <summary>コンストラクタでメッセージを配信するPublisherを渡す</summary>
-    public ItemEventProvider(IPublisher<ItemData> publisher)
+    public ItemEventPresenter(IPublisher<ItemData> publisher)
     {
         _itemPublisher = publisher;
     }
 
-    /// <summary>毎フレーム呼ばれる</summary>
+    /// <summary>毎フレーム、Update()のタイミングで呼ばれる</summary>
     public void Tick()
     {
         // MessagePipeにメッセージ(構造体)を送信

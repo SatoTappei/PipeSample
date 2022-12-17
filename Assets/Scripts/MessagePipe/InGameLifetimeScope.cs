@@ -11,6 +11,8 @@ using VContainer.Unity;
 public class InGameLifetimeScope : LifetimeScope
 {
     [SerializeField] ItemEventReceiver _receiver;
+    // 以下テスト用のHoge、実際のゲームには必要ない
+    [SerializeField] HogeView _hogeView;
 
     protected override void Configure(IContainerBuilder builder)
     {
@@ -20,7 +22,12 @@ public class InGameLifetimeScope : LifetimeScope
         builder.RegisterMessageBroker<ItemData>(options);
         // メッセージを送信するProviderを起動する
         // ITickableインターフェースを実装してメッセージを作成、パイプに流す
-        builder.RegisterEntryPoint<ItemEventProvider>(Lifetime.Singleton);
+        builder.RegisterEntryPoint<ItemEventPresenter>(Lifetime.Singleton);
+
+        // 以下テスト用のHoge、実際のゲームには必要ない
+        builder.RegisterEntryPoint<HogePresenter>();
+        builder.Register<ItemData>(Lifetime.Singleton);
+        builder.RegisterComponent(_hogeView);
 
         // DI(依存性の注入)しながらInstantiate
         //builder.RegisterBuildCallback(resolver =>
