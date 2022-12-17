@@ -13,13 +13,13 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Animator _anim;
     [SerializeField] int _speed = 10;
 
-    Transform trans;
+    Transform _trans;
     /// <summary>ì¸óÕÇï€éùÇ∑ÇÈÉxÉNÉgÉã</summary>
     Vector3 _moveInput;
 
     void Awake()
     {
-        trans = transform;
+        _trans = transform;
     }
 
     void Start()
@@ -41,9 +41,9 @@ public class PlayerMove : MonoBehaviour
             {
                 if (_moveInput.sqrMagnitude != 0)
                 {
-                    Vector3 scale = trans.localScale;
+                    Vector3 scale = _trans.localScale;
                     scale.x = _moveInput.x;
-                    trans.localScale = scale;
+                    _trans.localScale = scale;
                 }
 
                 _anim.SetFloat("speed", _moveInput.sqrMagnitude);
