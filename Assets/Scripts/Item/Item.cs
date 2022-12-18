@@ -11,7 +11,6 @@ using UniRx.Triggers;
 /// </summary>
 public class Item : MonoBehaviour
 {
-
     void Start()
     {
         this.OnTriggerEnter2DAsObservable()
