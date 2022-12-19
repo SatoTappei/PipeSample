@@ -5,19 +5,22 @@ using MessagePipe;
 using VContainer;
 using VContainer.Unity;
 
-/// <summary>
-/// コンテナ
-/// </summary>
-public class InGameLifetimeScope : LifetimeScope
+namespace Example
 {
-    protected override void Configure(IContainerBuilder builder)
+    /// <summary>
+    /// コンテナ
+    /// </summary>
+    public class InGameLifetimeScope : LifetimeScope
     {
-        // int型のメッセージを登録する
-        // UniRxのMessageBrokerのイメージ
-        MessagePipeOptions options = builder.RegisterMessagePipe();
-        builder.RegisterMessageBroker<int>(options);
+        protected override void Configure(IContainerBuilder builder)
+        {
+            // int型のメッセージを登録する
+            // UniRxのMessageBrokerのイメージ
+            MessagePipeOptions options = builder.RegisterMessagePipe();
+            builder.RegisterMessageBroker<AttackData>(options);
 
-        // エントリーポイントの登録
-        builder.RegisterEntryPoint<IntEntryPoint>(Lifetime.Singleton);
+            // エントリーポイントの登録
+            builder.RegisterEntryPoint<BattleEntryPoint>();
+        }
     }
 }
