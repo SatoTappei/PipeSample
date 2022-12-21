@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/InGame_Stage_1.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Title.unity
+    guid: a7bed788a80831d4fb4cffa016ef908b
+  - enabled: 1
+    path: Assets/InGame_Stage_3.unity
+    guid: bafcce159e2264b4887a33fd0840c68d
+  - enabled: 1
+    path: Assets/Result.unity
+    guid: 4a320bc16dfcec0479e91603db5f462e
   m_configObjects: {}
