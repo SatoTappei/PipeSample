@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 using MessagePipe;
-using System;
 using UniRx;
 using UniRx.Triggers;
 
@@ -11,6 +12,9 @@ using UniRx.Triggers;
 /// </summary>
 public class Item : MonoBehaviour
 {
+    [Inject] IPublisher<string> _publisher;
+    [SerializeField] string _name;
+
     void Start()
     {
         this.OnTriggerEnter2DAsObservable()
@@ -18,7 +22,7 @@ public class Item : MonoBehaviour
             {
                 if (c.gameObject.CompareTag("Player"))
                 {
-                    // ‚±‚±‚ÉŠl“¾ˆ—‚ğ’Ç‰Á
+                    _publisher.Publish(_name);
                     Destroy(gameObject);
                 }
             });

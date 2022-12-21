@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using MessagePipe;
+using VContainer;
 
 /// <summary>
 /// プレイヤーの操作を行うコンポーネント
@@ -11,22 +13,20 @@ public class PlayerController : MonoBehaviour
 {
     readonly int JumpPower = 20;
 
+    [Inject] IPublisher<AttackData> _publisher;
+
+    [SerializeField] Transform _weapon;
+    [SerializeField] Transform _sprite;
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] Animator _anim;
     [SerializeField] Collider2D _jumpCol;
     [SerializeField] LayerMask _mask;
     [SerializeField] int _speed = 10;
 
-    Transform _trans;
     /// <summary>攻撃状態を表すフラグ</summary>
     bool _onAttack;
     /// <summary>入力を保持するベクトル</summary>
     Vector3 _moveInput;
-
-    void Awake()
-    {
-        _trans = transform;
-    }
 
     void Start()
     {
@@ -54,14 +54,14 @@ public class PlayerController : MonoBehaviour
         // 攻撃
         ObservableStateMachineTrigger trigger = _anim.GetBehaviour<ObservableStateMachineTrigger>();
         trigger.OnStateEnterAsObservable()
-               .Where(x => x.StateInfo.IsName("Attack"))
+               .Where(state => state.StateInfo.IsName("Attack"))
                .Subscribe(_ => 
                { 
                    _onAttack = true; 
                }).AddTo(this);
         
         trigger.OnStateExitAsObservable()
-               .Where(x => x.StateInfo.IsName("Attack"))
+               .Where(state => state.StateInfo.IsName("Attack"))
                .Subscribe(_ => 
                {
                    _onAttack = false;
@@ -72,6 +72,9 @@ public class PlayerController : MonoBehaviour
             .Subscribe(_ => 
             {
                 _anim.Play("Attack");
+
+                // 攻撃のメッセージを発行
+                _publisher.Publish(new AttackData(_weapon.position, 7.7f, 100));
             }).AddTo(this);
 
         // 振り向きのアニメーション
@@ -80,9 +83,9 @@ public class PlayerController : MonoBehaviour
             {
                 if (_moveInput.sqrMagnitude != 0)
                 {
-                    Vector3 scale = _trans.localScale;
+                    Vector3 scale = _sprite.localScale;
                     scale.x = _moveInput.x;
-                    _trans.localScale = scale;
+                    _sprite.localScale = scale;
                 }
 
                 _anim.SetFloat("speed", _moveInput.sqrMagnitude);
