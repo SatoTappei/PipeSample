@@ -14,11 +14,5 @@ public class InGameLifetimeScope : LifetimeScope
         
         builder.RegisterMessageBroker<string>(options);
         builder.RegisterMessageBroker<AttackData>(options);
-
-        // Boxプレハブをジェネレーターから動的に生成したい
-        // 動的に生成したオブジェクトはInject出来ないがどうにかしたい
-        // 
-        //builder.
-        //builder.RegisterEntryPoint<Generator>(Lifetime.Singleton);
     }
 }
