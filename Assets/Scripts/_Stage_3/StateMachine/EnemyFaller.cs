@@ -5,18 +5,10 @@ using UnityEngine;
 namespace Stage3
 {
     /// <summary>
-    /// プレイヤーを見つけると追いかけてくる敵のステートマシン
+    /// プレイヤーを見つけると落下する敵のコンポーネント
     /// </summary>
-    public class StateMachineChaser : MonoBehaviour, IPauseable
+    public class EnemyFaller : MonoBehaviour, IPauseable
     {
-        enum Event
-        {
-            Idle,
-            Wander,
-            Chase,
-            Jump,
-        }
-
         void Start()
         {
 

@@ -775,7 +775,7 @@ GameObject:
   - component: {fileID: 443764477}
   - component: {fileID: 443764480}
   m_Layer: 0
-  m_Name: Enemy_Blue
+  m_Name: Enemy_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -811,7 +811,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _breed: {fileID: 11400000, guid: 5147f69a1704b5f438477f818bdccde1, type: 2}
-  _name: "\u84BC\u306E\u3053\u304E\u308A"
+  _name: "\u8D64\u306E\u3053\u304E\u308A"
   _breedView: {fileID: 763011102}
   _nameView: {fileID: 580374271}
 --- !u!58 &443764478
@@ -863,6 +863,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d050a89fb9230874c918f8c8dfa95b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _target: {fileID: 8293218794394886288}
+  _rb: {fileID: 443764479}
 --- !u!1 &482523850
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,7 +1376,7 @@ GameObject:
   - component: {fileID: 876190602}
   - component: {fileID: 876190605}
   m_Layer: 0
-  m_Name: Enemy_Red
+  m_Name: Enemy_Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1410,7 +1412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _breed: {fileID: 11400000, guid: 5147f69a1704b5f438477f818bdccde1, type: 2}
-  _name: "\u7D05\u306E\u3053\u304E\u308A"
+  _name: "\u9752\u306E\u3053\u304E\u308A"
   _breedView: {fileID: 1856076202}
   _nameView: {fileID: 1679426893}
 --- !u!58 &876190603
@@ -1462,6 +1464,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d050a89fb9230874c918f8c8dfa95b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _target: {fileID: 8293218794394886288}
+  _rb: {fileID: 876190604}
 --- !u!1 &910275030
 GameObject:
   m_ObjectHideFlags: 0
@@ -7541,6 +7545,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d050a89fb9230874c918f8c8dfa95b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _target: {fileID: 8293218794394886288}
+  _rb: {fileID: 1440321622}
 --- !u!1 &1470533456
 GameObject:
   m_ObjectHideFlags: 0
