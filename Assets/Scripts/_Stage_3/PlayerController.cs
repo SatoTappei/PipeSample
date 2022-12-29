@@ -15,12 +15,22 @@ namespace Stage3
 
         void Start()
         {
-
+            // テスト用にコライダーとリジボを止める
+            GetComponent<CapsuleCollider2D>().enabled = false;
+            GetComponent<Rigidbody2D>().isKinematic = true;
         }
 
         void Update()
         {
+            float hori = Input.GetAxis("Horizontal") * 0.5f;
+            float vert = Input.GetAxis("Vertical") * 0.5f;
 
+            Vector3 pos = transform.position;
+
+            pos.x += hori;
+            pos.y += vert;
+
+            transform.position = pos;
         }
 
         public void Pause()

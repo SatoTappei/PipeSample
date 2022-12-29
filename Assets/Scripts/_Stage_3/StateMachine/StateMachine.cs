@@ -9,14 +9,18 @@ namespace Stage3
     /// </summary>
     public class StateMachine
     {
-        /// <summary>現在のステート</summary>
-        State _currentState;
-        /// <summary>このステートマシンに登録するステートのセット</summary>
-        //HashSet<State> _stateSet;
+        /// <summary>ステートの合計数、遷移先を格納する辞書型の初期容量に使う</summary>
+        readonly int Total;
 
-        public StateMachine(int capacity)
+        State _currentState;
+        /// <summary>どのステートからでも出来る遷移の起点となるステート</summary>
+        State _anyState;
+
+        public StateMachine(int total)
         {
-            //_stateSet = new HashSet<State>(capacity);
+            Total = total;
+            _anyState = new AnyState();
+            _anyState.Dic = new Dictionary<int, State>(Total);
         }
 
         /// <summary>ステートを指定して始める</summary>
@@ -32,35 +36,36 @@ namespace Stage3
             _currentState.OnUpdate();
         }
 
-        ///// <summary>遷移を追加する</summary>
-        //public void AddTransition<TFrom, TTo>(int id) where TFrom : State
-        //                                              where TTo   : State
-        //{
-        //    // 未使用
-        //}
-
-        /// <summary>遷移を追加する</summary>
-        public void AddTransition(State from, State to, int id)
+        /// <summary>渡された型のステートのインスタンスを生成して返す</summary>
+        public T Instantiate<T>(params Object[] objs) where T : State, new()
         {
-            // このステートマシンで使用するステートとして追加する
-            //_stateSet.Add(from);
-            //_stateSet.Add(to);
+            T state = new T();
 
-            // from の移動先のステートとして to を登録する
-            from.AddState(id, to);
+            // コンストラクタが使えないのでプロパティとメソッドを使用してフィールドに代入
+            state.Dic = new Dictionary<int, State>(Total);
+            state.StateMachine = this;
+            state.SetField(objs);
+
+            return state;
         }
 
-        ///// <summary>どのステートからでも遷移できる遷移を追加する</summary>
-        //public void AddAnyTransition<TTo>(int id) where TTo : State
-        //{
-        //    // 未使用
-        //}
+        /// <summary>遷移を追加する</summary>
+        public void AddTransition(int id, State from, State to) => from.AddState(id, to);
+
+        /// <summary>どのステートからでも出来る遷移を追加する</summary>
+        public void AddAnyTransition(int id, State to) => _anyState.AddState(id, to);
 
         /// <summary>指定したIDのステートに遷移する</summary>
-        public void Transition(int id)
+        public void Transition(int id) => Transition(_currentState, id);
+
+        /// <summary>指定したIDのステートに、どのステートからでも出来る遷移を行う</summary>
+        public void AnyTransition(int id) => Transition(_anyState, id);
+
+        /// <summary>次のステートに遷移する際の処理</summary>
+        void Transition(State state, int id)
         {
             _currentState.OnExit();
-            _currentState = _currentState.GetState(id);
+            _currentState = state.GetState(id);
             _currentState.OnEnter();
         }
 
@@ -69,33 +74,30 @@ namespace Stage3
         /// </summary>
         public abstract class State
         {
-            /// <summary>辞書型の初期容量、超えないように設定する</summary>
-            readonly int _capacity;
             /// <summary>このステートの遷移先を保存する辞書型</summary>
             Dictionary<int, State> _dic;
             /// <summary>このステートが登録されているステートマシン</summary>
-            protected StateMachine _stateMachine;
+            StateMachine _stateMachine;
 
-            public State(int capacity, StateMachine stateMachine)
+            // 1度代入したら再代入できないプロパティ
+            public Dictionary<int, State> Dic
             {
-                _capacity = capacity;
-                _dic = new Dictionary<int, State>(capacity);
-                _stateMachine = stateMachine;
+                get => _dic;
+                set => _dic = _dic ?? value;
+            }
+            public StateMachine StateMachine
+            {
+                get => _stateMachine;
+                set => _stateMachine = _stateMachine ?? value;
             }
 
             /// <summary>遷移先のステートを追加する</summary>
-            public void AddState(int id, State state)
-            {
-                if (_dic.Count == _capacity)
-                    Debug.LogWarning("ステート数が初期容量をオーバーしました: " + this);
-
-                 _dic[id] = state;
-            }
+            public void AddState(int id, State state) => Dic[id] = state;
 
             /// <summary>遷移先のステートを取得する</summary>
             public State GetState(int id)
             {
-                if (_dic.TryGetValue(id, out State value))
+                if (Dic.TryGetValue(id, out State value))
                 {
                     return value;
                 }
@@ -106,6 +108,10 @@ namespace Stage3
                 }
             }
 
+            /// <summary>引数ありコンストラクタが使えないのでメソッドでフィールドへの参照を渡す</summary>
+            /// <param name="objs">現在の体力など、値型には対応していない</param>
+            public abstract void SetField(params Object[] objs);
+            
             public abstract void OnEnter();
             public abstract void OnUpdate();
             public abstract void OnExit();
@@ -116,8 +122,7 @@ namespace Stage3
         /// </summary>
         class AnyState : State
         {
-            public AnyState(int capacity, StateMachine stateMachine) : base(capacity, stateMachine) { }
-
+            public override void SetField(params Object[] objs) { }
             public override void OnEnter() { }
             public override void OnUpdate() { }
             public override void OnExit() { }
