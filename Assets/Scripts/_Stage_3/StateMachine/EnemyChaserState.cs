@@ -14,13 +14,15 @@ namespace Stage3
         /// <summary>
         /// アイドル状態のステート
         /// </summary>
-        class StateIdle : State, IMoveChaseable
+        class StateIdle : State, IMoveChaseable, IPauseable
         {
             public GameObject Actor { get; set; }
             public Transform Target { get; set; }
             public Rigidbody2D Rb { get; set; }
 
-            readonly float Range = 5f;
+            readonly float Range = 15f;
+            /// <summary>うろうろ状態に遷移する確率</summary>
+            readonly int Prob = 2;
 
             public override void SetField(params Object[] objs)
             {
@@ -36,12 +38,17 @@ namespace Stage3
 
             public override void OnUpdate()
             {
-                // 確率でうろうろ状態に遷移する
-
                 // プレイヤーとの距離が一定以下なら追跡状態に遷移する
                 if ((Target.position - Actor.transform.position).sqrMagnitude < Range)
                 {
                     StateMachine.Transition((int)StateID.Chase);
+                    return;
+                }
+
+                // 確率でうろうろ状態に遷移する
+                if (Random.Range(0, 100) < Prob)
+                {
+                    StateMachine.Transition((int)StateID.Wander);
                     return;
                 }
             }
@@ -50,16 +57,28 @@ namespace Stage3
             {
 
             }
+
+            public void Pause()
+            {
+                Debug.Log("ポーズ");
+            }
+
+            public void Release()
+            {
+            }
         }
 
         /// <summary>
         /// うろうろ状態のステート
         /// </summary>
-        class StateWander : State, IMoveChaseable
+        class StateWander : State, IMoveChaseable, IPauseable
         {
             public GameObject Actor { get; set; }
             public Transform Target { get; set; }
             public Rigidbody2D Rb { get; set; }
+
+            int _dir;
+            float _time;
 
             public override void SetField(params Object[] objs)
             {
@@ -70,25 +89,38 @@ namespace Stage3
 
             public override void OnEnter()
             {
-
+                // 左右どちらかにランダムな移動時間だけ移動する
+                _dir = (int)Mathf.Sign(Random.Range(-10, 11));
+                _time = Random.Range(0.5f, 1.5f);
+                // 移動が終わったらアイドル状態に遷移する
+                // 足場が無くなったらジャンプステートに遷移する
             }
 
             public override void OnUpdate()
             {
                 // うろうろが終わったらアイドル状態に遷移する
                 // 段差を見つけたらジャンプをする
+
             }
 
             public override void OnExit()
             {
 
             }
+
+            public void Pause()
+            {
+            }
+
+            public void Release()
+            {
+            }
         }
 
         /// <summary>
         /// プレイヤーを追跡している状態のステート
         /// </summary>
-        class StateChase : State, IMoveChaseable
+        class StateChase : State, IMoveChaseable, IPauseable
         {
             public GameObject Actor { get; set; }
             public Transform Target { get; set; }
@@ -127,12 +159,20 @@ namespace Stage3
             {
 
             }
+
+            public void Pause()
+            {
+            }
+
+            public void Release()
+            {
+            }
         }
 
         /// <summary>
         /// ジャンプしている状態のステート
         /// </summary>
-        class StateJump : State, IMoveChaseable
+        class StateJump : State, IMoveChaseable, IPauseable
         {
             public GameObject Actor { get; set; }
             public Transform Target { get; set; }
@@ -158,6 +198,16 @@ namespace Stage3
             public override void OnExit()
             {
 
+            }
+
+            public void Pause()
+            {
+                //Debug.Log("ポーズ");
+            }
+
+            public void Release()
+            {
+                //Debug.Log("ポーズ解除");
             }
         }
 

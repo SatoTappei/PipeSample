@@ -22,6 +22,7 @@ namespace Stage3
 
         void Update()
         {
+            // テスト用の実装
             float hori = Input.GetAxis("Horizontal") * 0.5f;
             float vert = Input.GetAxis("Vertical") * 0.5f;
 

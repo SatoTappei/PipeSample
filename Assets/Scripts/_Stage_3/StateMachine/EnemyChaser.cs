@@ -25,13 +25,22 @@ namespace Stage3
 
         /// <summary>ステートマシンの操作は使う側で行う</summary>
         StateMachine _stateMachine;
+        /// <summary>各ステートのポーズ処理を配列に格納して一気に呼ぶ</summary>
+        IPauseable[] _states;
 
         // テスト:検証用の仮の死亡フラグ、検証が終わったら消す
         bool _isDead;
 
         void Start()
         {
+            // 現在の課題
+            // 1.IMoveChaseableを継承したステートが同じフィールドを持っているので
+            //   共通部分を抜き出せないか
+            // 2.AnyStateの遷移条件をこっちのUpdate内に書いているのでなんか汚い
+            // 3.各ステートにポーズ機能の実装
+
             _stateMachine = new StateMachine(5);
+            //_states = new IPauseable[5];
 
             // 各ステートのインスタンスを生成する
             StateIdle idle     = _stateMachine.Instantiate<StateIdle>  (gameObject, _target, _rb);
@@ -39,6 +48,14 @@ namespace Stage3
             StateChase chase   = _stateMachine.Instantiate<StateChase> (gameObject, _target, _rb);
             StateJump jump     = _stateMachine.Instantiate<StateJump>  (gameObject, _target, _rb);
             StateEnd end       = _stateMachine.Instantiate<StateEnd>   ();
+
+            _states = new IPauseable[]
+            {
+                idle,
+                wander,
+                chase,
+                jump,
+            };
 
             // アイドル状態から うろうろ 追跡 状態に遷移できる
             _stateMachine.AddTransition((int)StateID.Wander, idle, wander);
@@ -65,6 +82,15 @@ namespace Stage3
             {
                 _isDead = true;
             }
+            // 以下二つテスト用、ポーズ処理
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                Pause();
+            }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                Release();
+            }
         }
 
         void FixedUpdate()
@@ -83,12 +109,14 @@ namespace Stage3
 
         public void Pause()
         {
-            // ポーズ時の処理
+            foreach (IPauseable state in _states)
+                state.Pause();
         }
 
         public void Release()
         {
-            // ポーズ解除時の処理
+            foreach (IPauseable state in _states)
+                state.Release();
         }
     }
 }
